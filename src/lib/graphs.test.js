@@ -16,6 +16,15 @@ describe('upsertDateRow', () => {
     expect(rows).toEqual([{ x: '2026-10-20', values: { a: 69, b: 5 } }]);
   });
 
+  it('leaves existing numbers alone when a box is empty', () => {
+    let rows = upsertDateRow([], '2026-10-20', { a: 70, b: 5 });
+    rows = upsertDateRow(rows, '2026-10-20', { a: 71, b: '' });
+    expect(rows[0].values).toEqual({ a: 71, b: 5 });
+    let cats = upsertCategoryRow([], 'Sweets', { a: 2, b: 4 });
+    cats = upsertCategoryRow(cats, 'Sweets', { a: 3, b: null });
+    expect(cats[0].values).toEqual({ a: 3, b: 4 });
+  });
+
   it('stores empty values as null', () => {
     expect(upsertDateRow([], '2026-10-20', { a: '' })[0].values.a).toBeNull();
   });

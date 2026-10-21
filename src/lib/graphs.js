@@ -42,13 +42,19 @@ function cleanValues(values) {
   return out;
 }
 
+// Only the boxes that were filled in, so empty ones leave existing numbers alone.
+function filled(values) {
+  return Object.fromEntries(Object.entries(values).filter(([, v]) => v !== null));
+}
+
 // Adds or updates the row for a date, keeping rows sorted by date. Returns new rows.
+// Empty values never overwrite numbers already saved for that date.
 export function upsertDateRow(rows, date, values) {
   const clean = cleanValues(values);
   const existing = rows.find((r) => r.x === date);
   let next;
   if (existing) {
-    next = rows.map((r) => (r.x === date ? { x: date, values: { ...r.values, ...clean } } : r));
+    next = rows.map((r) => (r.x === date ? { x: date, values: { ...r.values, ...filled(clean) } } : r));
   } else {
     next = [...rows, { x: date, values: clean }];
   }
@@ -61,7 +67,7 @@ export function upsertCategoryRow(rows, label, values) {
   const clean = cleanValues(values);
   const i = rows.findIndex((r) => r.x.toLowerCase() === x.toLowerCase());
   if (i === -1) return [...rows, { x, values: clean }];
-  return rows.map((r, j) => (j === i ? { x: r.x, values: { ...r.values, ...clean } } : r));
+  return rows.map((r, j) => (j === i ? { x: r.x, values: { ...r.values, ...filled(clean) } } : r));
 }
 
 export function lastValue(graph, seriesId) {

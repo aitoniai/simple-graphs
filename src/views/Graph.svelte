@@ -192,13 +192,13 @@
     const s = graph.series.find((x) => x.id === graph.chart.shown[0]);
     const vals = seriesValues(graph, s.id);
     if (vals.length === 0) return null;
-    const u = s.unit ? ` ${s.unit}` : '';
+    const unit = s.unit;
     const change = vals.at(-1) - vals[0];
     return [
-      { label: 'Latest', value: formatNumber(vals.at(-1)) + u },
-      { label: 'Since start', value: (change > 0 ? '+' : change < 0 ? '−' : '') + formatNumber(Math.abs(change)) + u },
-      { label: 'Lowest', value: formatNumber(Math.min(...vals)) + u },
-      { label: 'Highest', value: formatNumber(Math.max(...vals)) + u }
+      { label: 'Latest', value: formatNumber(vals.at(-1)), unit },
+      { label: 'Since start', value: (change > 0 ? '+' : change < 0 ? '−' : '') + formatNumber(Math.abs(change)), unit },
+      { label: 'Lowest', value: formatNumber(Math.min(...vals)), unit },
+      { label: 'Highest', value: formatNumber(Math.max(...vals)), unit }
     ];
   });
 
@@ -241,7 +241,7 @@
     {#if stats}
       <div class="stats">
         {#each stats as s}
-          <div class="stat"><span>{s.label}</span><strong>{s.value}</strong></div>
+          <div class="stat"><span>{s.label}</span><strong>{s.value}</strong>{#if s.unit}<small>{s.unit}</small>{/if}</div>
         {/each}
       </div>
     {/if}
@@ -316,7 +316,7 @@
           <span>{graph.series.length > 1 ? s.name : 'Number'}{s.unit ? ` (${s.unit})` : ''}</span>
           <div class="stepper">
             <button type="button" class="icon-btn" aria-label="Less" onclick={() => nudge(s.id, -1)}><Icon name="minus" /></button>
-            <input class="input num" inputmode="decimal" enterkeyhint="done" bind:value={addValues[s.id]} placeholder={formatNumber(lastValue(graph, s.id) ?? 0)} aria-label={s.name} />
+            <input class="input num" inputmode="decimal" enterkeyhint="done" bind:value={addValues[s.id]} placeholder={isDate ? formatNumber(lastValue(graph, s.id) ?? 0) : '0'} aria-label={s.name} />
             <button type="button" class="icon-btn" aria-label="More" onclick={() => nudge(s.id, 1)}><Icon name="plus" /></button>
           </div>
         </div>
@@ -435,7 +435,8 @@
     min-width: 0;
   }
   .stat span { font-size: 0.75rem; color: var(--text-muted); }
-  .stat strong { font-size: 0.9375rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stat strong { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stat small { font-size: 0.75rem; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; margin-bottom: 12px; }
   .no-data { text-align: center; padding: 32px 0 16px; }
   .no-data p { margin: 4px 0; }
