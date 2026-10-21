@@ -25,8 +25,9 @@ Track something every day, or compare a few things side by side. Everything stay
 ## Install it on your phone (1 minute)
 
 1. Open **https://aitoniai.github.io/simple-graphs/** in **Chrome**.
-2. Tap the **⋮** menu (top right) → **Add to Home screen** → **Install**.
-3. The **Simple Graphs** icon appears on your home screen. Open it from there from now on.
+2. Tap the **⋮** menu (top right) → **Install** (older versions of Chrome call it **Add to Home screen**). Then confirm with **Install**.
+   - Choose **Install**, not **Create shortcut**. A shortcut only opens the page in a Chrome tab, while Install gives you the full-screen app that works offline.
+3. The **Simple Graphs** icon appears on your home screen and in your apps list. Open it from there from now on.
 
 > On an iPhone, open the link in Safari and use **Share → Add to Home Screen**.
 
